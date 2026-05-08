@@ -1,0 +1,51 @@
+/* Crop Dashboard - Matching Original Mockup */
+.crop-dashboard {
+    margin-top: 0;
+}
+
+.crop-dashboard__header {
+    margin-bottom: 20px;
+}
+
+.crop-dashboard__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    font-style: italic;
+    color: #ffffff;
+    margin: 0 0 4px 0;
+}
+
+.crop-dashboard__title-accent {
+    color: #a8d5a2;
+}
+
+.crop-dashboard__count {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+.crop-dashboard__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.crop-dashboard__empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+.crop-dashboard__loading,
+.crop-dashboard__error {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.5);
+}

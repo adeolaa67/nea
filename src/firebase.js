@@ -8,8 +8,7 @@ const firebaseConfig = {
   projectId: "crop-companion-ee589",
   storageBucket: "crop-companion-ee589.firebasestorage.app",
   messagingSenderId: "261559538656",
-  appId: "1:261559538656:web:f8c145231d8c2672c3d185",
-  measurementId: "G-7WQ4S23KC5"
+  appId: "1:261559538656:web:f8c145231d8c2672c3d185"
 };
 
 const app = initializeApp(firebaseConfig);
