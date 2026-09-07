@@ -17,6 +17,7 @@ function HarvestCalculator({ onAddToCrops }) {
     const [formError, setFormError] = useState('');
     const [showDetails, setShowDetails] = useState(false);
     const [addState, setAddState] = useState('idle'); // idle | saving | saved | error
+    const [addError, setAddError] = useState('');
     const timerRef = useRef(null);
 
     useEffect(() => {
@@ -55,6 +56,7 @@ function HarvestCalculator({ onAddToCrops }) {
         setResult(null);
         setShowDetails(false);
         setAddState('idle');
+        setAddError('');
         setCalculating(true);
         clearTimeout(timerRef.current);
         timerRef.current = setTimeout(() => {
@@ -70,6 +72,7 @@ function HarvestCalculator({ onAddToCrops }) {
         const plant = plants.find(p => p.name === selectedPlant);
         if (!plant || !plantingDate || !onAddToCrops) return;
         setAddState('saving');
+        setAddError('');
         try {
             await onAddToCrops({
                 name: plant.name,
@@ -86,6 +89,7 @@ function HarvestCalculator({ onAddToCrops }) {
             setAddState('saved');
         } catch (err) {
             console.error('Failed to add crop from calculator:', err);
+            setAddError(err.code ? `${err.message} (${err.code})` : err.message || 'Unknown error.');
             setAddState('error');
         }
     }
@@ -189,7 +193,9 @@ function HarvestCalculator({ onAddToCrops }) {
                             {addState === 'saved' ? 'Added to Your Crops ✓' : addState === 'saving' ? 'Adding…' : 'Add to My Crops'}
                         </button>
                     )}
-                    {addState === 'error' && <p className="hc-error">Could not add this crop. Please try again.</p>}
+                    {addState === 'error' && (
+                        <p className="hc-error">Could not add this crop{addError ? `: ${addError}` : '. Please try again.'}</p>
+                    )}
                 </div>
             )}
         </div>
