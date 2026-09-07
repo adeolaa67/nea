@@ -1,93 +1,81 @@
-import React from 'react';
 import {
-    calculateProgress,
-    getGrowthStage,
-    getGrowthStageClass,
-    formatDateBritish,
-    deleteCrop
-} from '../../utils/cropUtils';
+  getProgressPercent,
+  getGrowthStage,
+  getEstimatedHarvestDate,
+  getDaysUntilHarvest,
+  GROWTH_STAGE_LABELS
+} from '../../utils/growthStage';
+import { getCropEmoji } from '../../utils/cropEmoji';
+import { getCropCategory } from '../../utils/cropCategory';
 
-export default function CropCard({ crop, onDelete }) {
-    const { progressPercent, daysRemaining, harvestDate } = calculateProgress(
-        crop.plantingDate,
-        crop.daysToMaturity
-    );
-    const stage = getGrowthStage(progressPercent);
-    const stageClass = getGrowthStageClass(stage);
+function formatShortDate(date) {
+  return new Date(date).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short'
+  });
+}
 
-    async function handleDelete() {
-        const confirmed = window.confirm(`Remove ${crop.name} from your crops?`);
-        if (!confirmed) return;
-        try {
-            await deleteCrop(crop.id);
-            onDelete(crop.id); 
-        } catch (err) {
-            console.error('Failed to delete crop:', err);
-            alert('Could not delete crop. Please try again.');
-        }
+export default function CropCard({ crop, onEdit, onDelete }) {
+  const progressPercent = getProgressPercent(crop.plantingDate, crop.daysToMaturity);
+  const stage = getGrowthStage(progressPercent);
+  const harvestDate = getEstimatedHarvestDate(crop.plantingDate, crop.daysToMaturity);
+  const daysRemaining = getDaysUntilHarvest(crop.plantingDate, crop.daysToMaturity);
+  const category = getCropCategory(crop.name);
+
+  async function handleDelete() {
+    if (!window.confirm(`Remove ${crop.name} from your crops?`)) return;
+    try {
+      await onDelete(crop);
+    } catch (err) {
+      console.error('Failed to delete crop:', err);
+      alert('Could not delete crop. Please try again.');
     }
+  }
 
-    return (
-        <div className="crop-card">
-
-            {/* Header row */}
-            <div className="crop-card__header">
-                <h3 className="crop-card__name">{crop.name}</h3>
-                <span className={`crop-card__stage ${stageClass}`}>{stage}</span>
-            </div>
-
-            {/* Progress bar */}
-            <div className="crop-card__progress-track">
-                <div
-                    className="crop-card__progress-fill"
-                    style={{ width: `${progressPercent}%` }}
-                />
-            </div>
-            <p className="crop-card__progress-label">{progressPercent}% grown</p>
-
-            {/* Details grid */}
-            <div className="crop-card__details">
-                <div className="crop-card__detail-item">
-                    <span className="crop-card__detail-label">Planted</span>
-                    <span className="crop-card__detail-value">
-                        {formatDateBritish(crop.plantingDate)}
-                    </span>
-                </div>
-                <div className="crop-card__detail-item">
-                    <span className="crop-card__detail-label">
-                        {progressPercent >= 100 ? 'Harvest date' : 'Est. harvest'}
-                    </span>
-                    <span className="crop-card__detail-value">
-                        {formatDateBritish(harvestDate)}
-                    </span>
-                </div>
-                <div className="crop-card__detail-item">
-                    <span className="crop-card__detail-label">Days left</span>
-                    <span className="crop-card__detail-value">
-                        {progressPercent >= 100 ? 'Ready now!' : `${daysRemaining} days`}
-                    </span>
-                </div>
-                <div className="crop-card__detail-item">
-                    <span className="crop-card__detail-label">Soil</span>
-                    <span className="crop-card__detail-value">{crop.soilType}</span>
-                </div>
-                <div className="crop-card__detail-item">
-                    <span className="crop-card__detail-label">pH</span>
-                    <span className="crop-card__detail-value">{crop.phLevel}</span>
-                </div>
-                <div className="crop-card__detail-item">
-                    <span className="crop-card__detail-label">Temp range</span>
-                    <span className="crop-card__detail-value">
-                        {crop.minTemp}°C – {crop.maxTemp}°C
-                    </span>
-                </div>
-            </div>
-
-            {/* Delete button */}
-            <button className="crop-card__delete-btn" onClick={handleDelete}>
-                Remove crop
-            </button>
-
+  return (
+    <div className="crop-card">
+      <div className="crop-card__top">
+        <div className="crop-card__identity">
+          <span className="crop-card__badge">
+            {crop.photoURL
+              ? <img src={crop.photoURL} alt="" />
+              : <span aria-hidden="true">{getCropEmoji(crop.name)}</span>}
+          </span>
+          <h3 className="crop-card__name">{crop.name}</h3>
         </div>
-    );
+        <span className={`crop-card__stage stage-${stage}`}>{GROWTH_STAGE_LABELS[stage]}</span>
+      </div>
+
+      <span className="crop-card__category">{category}</span>
+
+      <div className="crop-card__progress-row">
+        <span>Growth Progress</span>
+        <span>{progressPercent}%</span>
+      </div>
+      <div className="crop-card__progress-track">
+        <div className="crop-card__progress-fill" style={{ width: `${progressPercent}%` }} />
+      </div>
+
+      <div className="crop-card__meta-row">
+        <span className="crop-card__meta-icon" aria-hidden="true">🌱</span>
+        <span>
+          {progressPercent >= 100 ? 'Ready to harvest' : `Harvest: ${formatShortDate(harvestDate)}`}
+        </span>
+        <span className="crop-card__meta-days">
+          {progressPercent >= 100 ? 'Ready now!' : `${daysRemaining} days left`}
+        </span>
+      </div>
+
+      <div className="crop-card__meta-row">
+        <span className="crop-card__meta-icon" aria-hidden="true">🌡️</span>
+        <span>{crop.minTemp}–{crop.maxTemp}°C</span>
+        <span className="crop-card__meta-days">💧 {crop.waterPerWeek}</span>
+      </div>
+
+      <div className="crop-card__actions">
+        <button className="crop-card__edit-btn" onClick={() => onEdit(crop)}>Edit</button>
+        <button className="crop-card__delete-btn cc-danger" onClick={handleDelete}>Remove</button>
+      </div>
+    </div>
+  );
 }

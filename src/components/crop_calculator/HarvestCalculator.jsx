@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { loadPlantData } from './plantData';
 import { getWeatherAdjustment, getWeatherMessage, formatWeatherDisplay } from './weatherRules';
 import { calculateHarvestDate } from './calculatorLogic';
+import './HarvestCalculator.css';
 
-function HarvestCalculator() {
+const LOADER_MS = 1700;
+
+function HarvestCalculator({ onAddToCrops }) {
     const [plants, setPlants] = useState([]);
     const [selectedPlant, setSelectedPlant] = useState('');
     const [plantingDate, setPlantingDate] = useState('');
     const [weather, setWeather] = useState('normal');
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [calculating, setCalculating] = useState(false);
+    const [formError, setFormError] = useState('');
+    const [showDetails, setShowDetails] = useState(false);
+    const [addState, setAddState] = useState('idle'); // idle | saving | saved | error
+    const timerRef = useRef(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -20,77 +28,168 @@ function HarvestCalculator() {
         fetchData();
     }, []);
 
+    useEffect(() => () => clearTimeout(timerRef.current), []);
+
     const handleCalculate = () => {
+        setFormError('');
         if (!selectedPlant) {
-            alert('Please select a vegetable');
+            setFormError('Please select a vegetable.');
             return;
         }
         if (!plantingDate) {
-            alert('Please enter a planting date');
+            setFormError('Please enter a planting date.');
             return;
         }
         const plant = plants.find(p => p.name === selectedPlant);
-        if (!plant) return;
+        if (!plant) {
+            setFormError('Could not find that vegetable - please choose it from the list.');
+            return;
+        }
         const weatherAdjust = getWeatherAdjustment(weather);
         const calculation = calculateHarvestDate(plant, plantingDate, weatherAdjust);
         if (calculation.error) {
-            alert(calculation.error);
+            setFormError(calculation.error);
             return;
         }
-        setResult({
-            ...calculation,
-            weatherMessage: getWeatherMessage(weather)
-        });
+
+        setResult(null);
+        setShowDetails(false);
+        setAddState('idle');
+        setCalculating(true);
+        clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+            setResult({
+                ...calculation,
+                weatherMessage: getWeatherMessage(weather)
+            });
+            setCalculating(false);
+        }, LOADER_MS);
     };
 
-    if (loading) return <div>Loading your garden data...</div>;
+    async function handleAddToCrops() {
+        const plant = plants.find(p => p.name === selectedPlant);
+        if (!plant || !plantingDate || !onAddToCrops) return;
+        setAddState('saving');
+        try {
+            await onAddToCrops({
+                name: plant.name,
+                plantingDate,
+                daysToMaturity: plant.daysToMaturity,
+                soilType: plant.soilType,
+                phLevel: plant.phLevel,
+                waterPerWeek: plant.waterPerWeek,
+                minTemp: plant.minTemp,
+                maxTemp: plant.maxTemp,
+                hardinessZone: plant.hardinessZone,
+                plantSpacing: plant.plantSpacing
+            });
+            setAddState('saved');
+        } catch (err) {
+            console.error('Failed to add crop from calculator:', err);
+            setAddState('error');
+        }
+    }
+
+    if (loading) return <div className="hc-loading">Loading your garden data…</div>;
 
     return (
         <div className="calculator-container">
-            <h1>The Crop Companion</h1>
-            <p>Know exactly when to harvest your vegetables</p>
+            <p className="hc-intro">Know exactly when to harvest your vegetables</p>
 
             <div className="form-group">
                 <label>What did you plant?</label>
-                <select value={selectedPlant} onChange={(e) => setSelectedPlant(e.target.value)}>
-                    <option value="">-- Choose a vegetable --</option>
-                    {plants.map((plant, index) => (
-                        <option key={index} value={plant.name}>{plant.name}</option>
-                    ))}
-                </select>
+                <div className="hc-select-wrap">
+                    <select value={selectedPlant} onChange={(e) => setSelectedPlant(e.target.value)} disabled={calculating}>
+                        <option value="">-- Choose a vegetable --</option>
+                        {plants.map((plant, index) => (
+                            <option key={index} value={plant.name}>{plant.name}</option>
+                        ))}
+                    </select>
+                </div>
             </div>
 
             <div className="form-group">
                 <label>When did you plant it?</label>
-                <input type="date" value={plantingDate} onChange={(e) => setPlantingDate(e.target.value)} />
+                <div className="hc-date-wrap">
+                    <input
+                        type="date"
+                        value={plantingDate}
+                        onChange={(e) => setPlantingDate(e.target.value)}
+                        disabled={calculating}
+                    />
+                </div>
             </div>
 
             <div className="form-group">
                 <label>How has the weather been? (first 2 weeks)</label>
                 <div className="weather-options">
-                    <label><input type="radio" name="weather" value="sunny" checked={weather === 'sunny'} onChange={(e) => setWeather(e.target.value)} /> Sunny (faster)</label>
-                    <label><input type="radio" name="weather" value="normal" checked={weather === 'normal'} onChange={(e) => setWeather(e.target.value)} /> Normal</label>
-                    <label><input type="radio" name="weather" value="rainy" checked={weather === 'rainy'} onChange={(e) => setWeather(e.target.value)} /> Rainy (slower)</label>
-                    <label><input type="radio" name="weather" value="cold" checked={weather === 'cold'} onChange={(e) => setWeather(e.target.value)} /> Cold (much slower)</label>
+                    <label><input type="radio" name="weather" value="sunny" checked={weather === 'sunny'} onChange={(e) => setWeather(e.target.value)} disabled={calculating} /> Sunny (faster)</label>
+                    <label><input type="radio" name="weather" value="normal" checked={weather === 'normal'} onChange={(e) => setWeather(e.target.value)} disabled={calculating} /> Normal</label>
+                    <label><input type="radio" name="weather" value="rainy" checked={weather === 'rainy'} onChange={(e) => setWeather(e.target.value)} disabled={calculating} /> Rainy (slower)</label>
+                    <label><input type="radio" name="weather" value="cold" checked={weather === 'cold'} onChange={(e) => setWeather(e.target.value)} disabled={calculating} /> Cold (much slower)</label>
                 </div>
             </div>
 
-            <button onClick={handleCalculate}>Calculate Harvest Date</button>
+            {formError && <p className="hc-error">{formError}</p>}
 
-            {result && (
-                <div className="result-box">
+            <button onClick={handleCalculate} disabled={calculating}>
+                {calculating ? 'Calculating…' : 'Calculate Harvest Date'}
+            </button>
+
+            {calculating && (
+                <div className="hc-loader">
+                    <svg viewBox="0 0 100 100" className="hc-loader__svg" aria-hidden="true">
+                        <path
+                            className="hc-loader__outline"
+                            d="M50 6 C22 22 10 55 50 94 C90 55 78 22 50 6 Z"
+                        />
+                        <line className="hc-loader__vein" x1="50" y1="20" x2="50" y2="80" />
+                    </svg>
+                    <p className="hc-loader__text">Growing your prediction…</p>
+                </div>
+            )}
+
+            {result && !calculating && (
+                <div className="result-box hc-result">
                     <h3>Your Harvest Prediction</h3>
-                    <p><strong>Plant:</strong> {result.plantName}</p>
-                    <p><strong>Planted on:</strong> {result.plantingDate}</p>
-                    <p><strong>Soil type:</strong> {result.soilType}</p>
-                    <p><strong>Soil pH:</strong> {result.phLevel}</p>
-                    <p><strong>Water per week:</strong> {result.waterPerWeek} cm</p>
-                    <p><strong>Temp range:</strong> {result.minTemp}°C - {result.maxTemp}°C</p>
-                    <p><strong>Normal growing time:</strong> {result.baseDays} days</p>
-                    <p><strong>Weather adjustment:</strong> {formatWeatherDisplay(result.weatherAdjust)}</p>
-                    <p><strong>{result.weatherMessage}</strong></p>
-                    <p><strong>Total days:</strong> {result.totalDays}</p>
-                    <p><strong>Harvest date:</strong> {result.harvestDate}</p>
+                    <div className="hc-result__headline">
+                        <span>{result.plantName} · planted {result.plantingDate}</span>
+                        <span className="hc-result__date">Harvest around {result.harvestDate}</span>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="hc-result__toggle"
+                        onClick={() => setShowDetails((v) => !v)}
+                    >
+                        {showDetails ? 'Show less ▲' : 'Show more ▼'}
+                    </button>
+
+                    {showDetails && (
+                        <div className="hc-result__details">
+                            <div className="hc-result__grid">
+                                <p><strong>Soil type:</strong> {result.soilType}</p>
+                                <p><strong>Soil pH:</strong> {result.phLevel}</p>
+                                <p><strong>Water per week:</strong> {result.waterPerWeek} cm</p>
+                                <p><strong>Temp range:</strong> {result.minTemp}°C - {result.maxTemp}°C</p>
+                                <p><strong>Normal growing time:</strong> {result.baseDays} days</p>
+                                <p><strong>Weather adjustment:</strong> {formatWeatherDisplay(result.weatherAdjust)}</p>
+                            </div>
+                            <p className="hc-result__weather-message">{result.weatherMessage}</p>
+                        </div>
+                    )}
+
+                    {onAddToCrops && (
+                        <button
+                            type="button"
+                            className="hc-result__add-btn"
+                            onClick={handleAddToCrops}
+                            disabled={addState === 'saving' || addState === 'saved'}
+                        >
+                            {addState === 'saved' ? 'Added to Your Crops ✓' : addState === 'saving' ? 'Adding…' : 'Add to My Crops'}
+                        </button>
+                    )}
+                    {addState === 'error' && <p className="hc-error">Could not add this crop. Please try again.</p>}
                 </div>
             )}
         </div>

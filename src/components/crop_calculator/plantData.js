@@ -10,13 +10,35 @@ export async function loadPlantData() {
     }
 }
 
+// Splits a single CSV line on commas while respecting double-quoted fields
+// (e.g. "44.1°N, 120.5°W") so a comma inside a quoted value doesn't shift
+// every column after it - a plain line.split(',') would corrupt the row.
+function splitCSVLine(line) {
+    const columns = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            columns.push(current);
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    columns.push(current);
+    return columns;
+}
+
 function parseCSV(csvText) {
     const lines = csvText.split('\n');
     const plantList = [];
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (line === '') continue;
-        const columns = line.split(',');
+        const columns = splitCSVLine(line);
         if (columns.length < 13) continue;
         plantList.push({
             id: columns[0].trim(),

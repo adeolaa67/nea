@@ -1,0 +1,165 @@
+.cc-contact {
+  position: relative;
+  min-height: 100vh;
+  background:
+    linear-gradient(160deg, hsl(140 30% 10% / 0.55), hsl(140 20% 8% / 0.7)),
+    url('/bg.jpg') center / cover no-repeat fixed;
+}
+
+.cc-contact__dim {
+  position: absolute;
+  inset: 0;
+  background: hsl(140 25% 6% / 0.35);
+  pointer-events: none;
+}
+
+.cc-contact__nav {
+  position: relative;
+  z-index: 2;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cc-contact__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: white;
+  text-decoration: none;
+}
+
+.cc-contact__back {
+  color: hsl(0 0% 100% / 0.8);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.cc-contact__back:hover {
+  color: white;
+}
+
+.cc-contact__main {
+  position: relative;
+  z-index: 2;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 30px 20px 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.cc-contact__card {
+  background: hsl(0 0% 100% / 0.94);
+  backdrop-filter: blur(6px);
+  border-radius: var(--cc-radius);
+  padding: 34px 32px;
+  box-shadow: 0 16px 40px rgba(10, 20, 10, 0.35);
+}
+
+.cc-contact__email-card {
+  text-align: center;
+}
+
+.cc-contact__lede {
+  color: hsl(var(--cc-text-muted));
+  margin-bottom: 20px;
+}
+
+.cc-contact__email {
+  display: inline-block;
+  background: hsl(var(--cc-primary));
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 14px 28px;
+  border-radius: 999px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cc-contact__email:hover {
+  background: hsl(var(--cc-primary-dark));
+  transform: translateY(-2px);
+}
+
+/* ---------- FAQ accordion ---------- */
+.cc-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.cc-faq__item {
+  border: 1px solid hsl(var(--cc-border));
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cc-faq__item--open {
+  border-color: hsl(var(--cc-primary));
+  box-shadow: 0 4px 16px rgba(60, 90, 60, 0.12);
+}
+
+.cc-faq__question {
+  width: 100%;
+  background: hsl(var(--cc-primary-light) / 0.3);
+  color: hsl(var(--cc-text));
+  border-radius: 0;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.cc-faq__item--open .cc-faq__question {
+  background: hsl(var(--cc-primary) / 0.18);
+  color: hsl(var(--cc-primary-dark));
+}
+
+.cc-faq__chevron {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+  font-size: 1.2rem;
+}
+
+.cc-faq__item--open .cc-faq__chevron {
+  transform: rotate(180deg);
+}
+
+.cc-faq__answer-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+
+.cc-faq__item--open .cc-faq__answer-wrap {
+  grid-template-rows: 1fr;
+}
+
+.cc-faq__answer-wrap > .cc-faq__answer {
+  overflow: hidden;
+  margin: 0;
+  padding: 0 18px;
+  color: hsl(var(--cc-text-muted));
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.cc-faq__item--open .cc-faq__answer {
+  padding: 12px 18px 16px;
+}

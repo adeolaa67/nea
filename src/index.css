@@ -1,0 +1,108 @@
+/*
+  Design tokens, kept as plain CSS custom properties (HSL triplets) rather
+  than a Tailwind config, so every color in the app is semantic and defined
+  in one place - same rule CropWise asked for, without swapping build tools.
+  Tuned for a muted, greyish-green agricultural palette.
+*/
+:root {
+  --cc-bg: 100 12% 96%;
+  --cc-surface: 0 0% 100%;
+  --cc-primary: 140 12% 38%;
+  --cc-primary-dark: 140 16% 23%;
+  --cc-primary-light: 140 10% 88%;
+  --cc-accent: 32 32% 56%;
+  --cc-text: 140 8% 18%;
+  --cc-text-muted: 140 6% 42%;
+  --cc-border: 140 8% 84%;
+  --cc-danger: 5 55% 48%;
+  --cc-warning: 35 70% 50%;
+  --cc-success: 140 25% 36%;
+  --cc-radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: hsl(var(--cc-bg));
+  color: hsl(var(--cc-text));
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: hsl(var(--cc-primary-dark));
+  margin: 0 0 12px;
+}
+
+p { margin: 0 0 8px; }
+
+.cc-muted {
+  color: hsl(var(--cc-text-muted));
+  font-size: 0.9rem;
+}
+
+.cc-card {
+  background: hsl(var(--cc-surface));
+  border: 1px solid hsl(var(--cc-border));
+  border-radius: var(--cc-radius);
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(20, 30, 20, 0.06);
+}
+
+.cc-page {
+  min-height: 100vh;
+}
+
+.cc-main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.cc-section {
+  scroll-margin-top: 90px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: hsl(var(--cc-primary));
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+button.cc-danger {
+  background: hsl(var(--cc-danger));
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input, select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid hsl(var(--cc-border));
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  color: hsl(var(--cc-text));
+}

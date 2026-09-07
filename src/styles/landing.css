@@ -1,0 +1,735 @@
+/* Crop Companion - dashboard shell styling: navbar, hero, weather,
+   alerts, crop grid extras, add-crop dialog, recommendations, footer.
+   Built entirely on the --cc-* tokens defined in src/index.css. */
+
+/* ---------- NavBar ---------- */
+.cc-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: hsl(var(--cc-primary-dark) / 0.65);
+  backdrop-filter: blur(6px);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cc-navbar--scrolled {
+  background: hsl(var(--cc-primary-dark) / 0.92);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+}
+
+.cc-navbar__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cc-navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cc-navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.cc-navbar__links a {
+  color: hsl(0 0% 100% / 0.85);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.cc-navbar__links a:hover {
+  color: white;
+}
+
+.cc-navbar__logout {
+  background: hsl(var(--cc-primary-light) / 0.2);
+  color: white;
+  padding: 7px 16px;
+  font-size: 0.85rem;
+}
+
+.cc-navbar__logout:hover {
+  background: hsl(var(--cc-primary-light) / 0.32);
+}
+
+@media (max-width: 640px) {
+  .cc-navbar__links {
+    gap: 12px;
+  }
+  .cc-navbar__links a {
+    display: none;
+  }
+}
+
+/* ---------- Hero ---------- */
+.cc-hero {
+  background:
+    linear-gradient(hsl(var(--cc-primary-dark) / 0.72), hsl(var(--cc-primary-dark) / 0.82)),
+    url('/bg.jpg') center / cover no-repeat;
+  color: white;
+  padding: 72px 20px 90px;
+  text-align: center;
+}
+
+.cc-hero__inner {
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.cc-hero__title {
+  color: white;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 16px;
+}
+
+.cc-hero__subtitle {
+  color: hsl(0 0% 100% / 0.85);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.cc-hero__cta {
+  background: hsl(var(--cc-accent));
+  padding: 12px 30px;
+  font-size: 1rem;
+}
+
+.cc-hero__cta:hover {
+  background: hsl(var(--cc-accent) / 0.85);
+}
+
+/* ---------- Section headings ---------- */
+.cc-section--crops {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(hsl(28 45% 18% / 0.82), hsl(20 40% 14% / 0.9)),
+    url('../assets/crops-bg.jpg') center / cover no-repeat;
+  border-radius: var(--cc-radius);
+  padding: 32px 24px;
+  color: white;
+}
+
+.cc-section--crops h2 {
+  color: white;
+}
+
+.cc-section--crops__content {
+  position: relative;
+  z-index: 2;
+}
+
+.cc-section__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: hsl(var(--cc-accent));
+  margin-bottom: 6px;
+}
+
+.cc-section__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+/* ---------- Weather widget ---------- */
+.cc-weather {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 2fr;
+  gap: 24px;
+}
+
+.cc-weather__geo-banner {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: hsl(var(--cc-warning) / 0.15);
+  border: 1px solid hsl(var(--cc-warning) / 0.4);
+  color: hsl(var(--cc-primary-dark));
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+}
+
+.cc-weather__geo-banner button {
+  background: hsl(var(--cc-warning));
+  padding: 6px 14px;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .cc-weather {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cc-weather__location-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: hsl(var(--cc-text-muted));
+}
+
+.cc-weather__location-current {
+  font-weight: 700;
+  color: hsl(var(--cc-text));
+}
+
+.cc-weather__location-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.cc-weather__link-btn {
+  background: transparent;
+  color: hsl(var(--cc-primary));
+  padding: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: underline;
+  border-radius: 0;
+}
+
+.cc-weather__search {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  animation: hc-result-in 0.25s ease;
+}
+
+.cc-weather__search input {
+  flex: 1;
+  min-width: 180px;
+  margin-bottom: 0;
+}
+
+.cc-weather__search button {
+  white-space: nowrap;
+}
+
+.cc-weather__search-error {
+  flex-basis: 100%;
+  color: hsl(var(--cc-danger));
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+.cc-weather__now {
+  background: hsl(var(--cc-primary-dark));
+  color: white;
+  border-radius: var(--cc-radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.cc-weather__emoji {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.cc-weather__temp {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.4rem;
+}
+
+.cc-weather__label {
+  color: hsl(0 0% 100% / 0.85);
+}
+
+.cc-weather__location {
+  font-size: 0.82rem;
+  color: hsl(0 0% 100% / 0.6);
+  margin-top: 4px;
+}
+
+.cc-weather__meta {
+  display: flex;
+  gap: 18px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: hsl(0 0% 100% / 0.75);
+}
+
+.cc-weather__forecast {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 520px) {
+  .cc-weather__forecast {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cc-weather__day {
+  background: hsl(var(--cc-surface));
+  border: 1px solid hsl(var(--cc-border));
+  border-radius: 12px;
+  padding: 14px 8px;
+  text-align: center;
+}
+
+.cc-weather__day-name {
+  font-weight: 700;
+  font-size: 0.82rem;
+  margin-bottom: 6px;
+}
+
+.cc-weather__day-emoji {
+  font-size: 1.6rem;
+}
+
+.cc-weather__day-temps {
+  font-size: 0.82rem;
+  margin-top: 6px;
+}
+
+.cc-weather__day-temps strong {
+  color: hsl(var(--cc-primary-dark));
+}
+
+.cc-weather__day-temps span {
+  color: hsl(var(--cc-text-muted));
+  margin-left: 4px;
+}
+
+/* ---------- Weather alerts ---------- */
+.cc-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cc-alerts__empty {
+  color: hsl(var(--cc-text-muted));
+  font-style: italic;
+}
+
+.cc-alert {
+  border-radius: 12px;
+  padding: 16px 18px;
+  border-left: 5px solid hsl(var(--cc-border));
+  background: hsl(var(--cc-surface));
+  display: flex;
+  gap: 14px;
+}
+
+.cc-alert__icon {
+  font-size: 1.5rem;
+}
+
+.cc-alert__title {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.cc-alert__desc {
+  font-size: 0.9rem;
+  color: hsl(var(--cc-text-muted));
+  margin-bottom: 6px;
+}
+
+.cc-alert__recommendation {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cc-alert__crops {
+  font-size: 0.78rem;
+  color: hsl(var(--cc-text-muted));
+  margin-top: 6px;
+}
+
+.cc-alert--low {
+  border-left-color: hsl(var(--cc-success));
+}
+.cc-alert--medium {
+  border-left-color: hsl(var(--cc-warning));
+}
+.cc-alert--high {
+  border-left-color: hsl(var(--cc-danger));
+}
+
+/* ---------- Add-crop card / dialog ---------- */
+.crop-add-card {
+  border: 2px dashed hsl(0 0% 100% / 0.3);
+  border-radius: 18px;
+  background: hsl(0 0% 100% / 0.04);
+  color: hsl(0 0% 100% / 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 220px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.crop-add-card:hover {
+  border-color: hsl(140 55% 55%);
+  color: white;
+  background: hsl(140 40% 30% / 0.25);
+  transform: translateY(-3px);
+}
+
+.crop-add-card__icon {
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.cc-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: hsl(var(--cc-primary-dark) / 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 60;
+}
+
+.cc-dialog {
+  background: hsl(var(--cc-surface));
+  border-radius: var(--cc-radius);
+  padding: 28px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: cc-dialog-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes cc-dialog-in {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ---------- Nicer select / date fields inside dialogs ---------- */
+.cc-select-field {
+  position: relative;
+}
+
+.cc-select-field::after {
+  content: '⌄';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-65%);
+  pointer-events: none;
+  color: hsl(var(--cc-primary));
+  font-size: 1.15rem;
+}
+
+.cc-select-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: hsl(var(--cc-primary-light) / 0.2);
+  border: 1.5px solid hsl(var(--cc-border));
+  padding: 11px 40px 11px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.cc-select-field select:hover {
+  border-color: hsl(var(--cc-primary));
+  transform: translateY(-1px);
+}
+
+.cc-select-field select:focus {
+  outline: none;
+  border-color: hsl(var(--cc-primary));
+  box-shadow: 0 0 0 3px hsl(var(--cc-primary) / 0.18);
+}
+
+.cc-date-field input[type="date"] {
+  color-scheme: light;
+  background: hsl(var(--cc-primary-light) / 0.2);
+  border: 1.5px solid hsl(var(--cc-border));
+  padding: 11px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.cc-date-field input[type="date"]:hover {
+  border-color: hsl(var(--cc-primary));
+  transform: translateY(-1px);
+}
+
+.cc-date-field input[type="date"]:focus {
+  outline: none;
+  border-color: hsl(var(--cc-primary));
+  box-shadow: 0 0 0 3px hsl(var(--cc-primary) / 0.18);
+}
+
+.cc-date-field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 3px;
+  filter: invert(38%) sepia(15%) saturate(700%) hue-rotate(70deg);
+  transition: background 0.2s ease;
+}
+
+.cc-date-field input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  background: hsl(var(--cc-primary-light) / 0.6);
+}
+
+.cc-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cc-dialog__close {
+  background: transparent;
+  color: hsl(var(--cc-text-muted));
+  padding: 4px 10px;
+  font-size: 1.1rem;
+}
+
+.cc-dialog__preview {
+  font-size: 0.85rem;
+  color: hsl(var(--cc-text-muted));
+  background: hsl(var(--cc-primary-light) / 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+/* ---------- Planting recommendations ---------- */
+.cc-recommend__zone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.cc-recommend__zone select {
+  width: auto;
+  margin-bottom: 0;
+}
+
+.cc-recommend__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.cc-plant-tile {
+  background: hsl(var(--cc-surface));
+  border: 1px solid hsl(var(--cc-border));
+  border-radius: 14px;
+  padding: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.cc-plant-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(30, 50, 30, 0.12);
+  border-color: hsl(var(--cc-primary) / 0.5);
+}
+
+.cc-plant-tile__name {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.cc-plant-tile__window {
+  font-size: 0.82rem;
+  color: hsl(var(--cc-text-muted));
+}
+
+.cc-plant-tile__alt {
+  font-size: 0.8rem;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed hsl(var(--cc-border));
+  color: hsl(var(--cc-success));
+}
+
+.cc-recommend__tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cc-recommend__tab {
+  background: hsl(var(--cc-primary-light) / 0.4);
+  color: hsl(var(--cc-primary-dark));
+  font-size: 0.85rem;
+  padding: 7px 16px;
+}
+
+.cc-recommend__tab--active {
+  background: hsl(var(--cc-primary));
+  color: white;
+}
+
+/* ---------- Falling particles (leaves / petals) ---------- */
+.cc-falling {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cc-falling__item {
+  position: absolute;
+  top: -12%;
+  will-change: transform, top;
+  animation-name: cc-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
+}
+
+/* top/left are percentages of the containing block's own height, so the
+   particle always travels the full height of whatever section it's in
+   (a short card or a tall page) instead of overshooting a vh-based
+   distance and getting clipped by the section's overflow:hidden. */
+@keyframes cc-fall {
+  0% {
+    top: -12%;
+    transform: translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    top: 112%;
+    transform: translateX(var(--cc-drift)) rotate(var(--cc-spin));
+    opacity: 0;
+  }
+}
+
+/* ---------- Realistic CSS leaf (used instead of emoji leaves) ---------- */
+.cc-leaf {
+  position: relative;
+  display: block;
+  border-radius: 0% 70% 0% 70%;
+  box-shadow: inset -4px -4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.cc-leaf__vein {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  width: 1px;
+  height: 84%;
+  background: rgba(0, 0, 0, 0.28);
+  transform: translateX(-50%) rotate(8deg);
+}
+
+.cc-leaf__vein::before,
+.cc-leaf__vein::after {
+  content: '';
+  position: absolute;
+  width: 45%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.22);
+  top: 35%;
+}
+
+.cc-leaf__vein::before {
+  left: 0;
+  transform: rotate(35deg);
+  transform-origin: left center;
+}
+
+.cc-leaf__vein::after {
+  right: 0;
+  transform: rotate(-35deg);
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-falling {
+    display: none;
+  }
+}
+
+/* ---------- Footer ---------- */
+.cc-footer {
+  background: hsl(var(--cc-primary-dark));
+  color: hsl(0 0% 100% / 0.75);
+  padding: 36px 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.cc-footer__brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+
+.cc-footer__tagline {
+  font-size: 0.88rem;
+}
+
+.cc-footer__links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.cc-footer__links a {
+  color: hsl(0 0% 100% / 0.75);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cc-footer__links a:hover {
+  color: white;
+}

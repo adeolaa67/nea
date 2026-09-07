@@ -1,0 +1,284 @@
+.calculator-container {
+  color: hsl(var(--cc-text));
+}
+
+.hc-loading {
+  color: hsl(var(--cc-text-muted));
+  padding: 20px 0;
+}
+
+.hc-intro {
+  color: hsl(var(--cc-text-muted));
+  margin-bottom: 18px;
+}
+
+.calculator-container .form-group {
+  margin-bottom: 16px;
+}
+
+/* ---------- Nicer select / date inputs ---------- */
+.hc-select-wrap {
+  position: relative;
+}
+
+.hc-select-wrap::after {
+  content: '⌄';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-60%);
+  pointer-events: none;
+  color: hsl(var(--cc-primary));
+  font-size: 1.1rem;
+}
+
+.calculator-container select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: hsl(var(--cc-surface));
+  border: 1.5px solid hsl(var(--cc-border));
+  padding: 10px 38px 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.calculator-container select:hover:not(:disabled) {
+  border-color: hsl(var(--cc-primary));
+  transform: translateY(-1px);
+}
+
+.calculator-container select:focus {
+  outline: none;
+  border-color: hsl(var(--cc-primary));
+  box-shadow: 0 0 0 3px hsl(var(--cc-primary) / 0.18);
+}
+
+.hc-date-wrap input[type="date"] {
+  color-scheme: light;
+  border: 1.5px solid hsl(var(--cc-border));
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.hc-date-wrap input[type="date"]:hover:not(:disabled) {
+  border-color: hsl(var(--cc-primary));
+  transform: translateY(-1px);
+}
+
+.hc-date-wrap input[type="date"]:focus {
+  outline: none;
+  border-color: hsl(var(--cc-primary));
+  box-shadow: 0 0 0 3px hsl(var(--cc-primary) / 0.18);
+}
+
+.hc-date-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 3px;
+  filter: invert(38%) sepia(15%) saturate(700%) hue-rotate(70deg);
+  transition: background 0.2s ease;
+}
+
+.hc-date-wrap input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  background: hsl(var(--cc-primary-light) / 0.5);
+}
+
+.calculator-container .weather-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px 16px;
+}
+
+.calculator-container .weather-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: hsl(var(--cc-text));
+}
+
+.calculator-container .weather-options input {
+  width: auto;
+  margin: 0;
+}
+
+.hc-error {
+  color: hsl(var(--cc-danger));
+  font-size: 0.88rem;
+  margin: -6px 0 12px;
+}
+
+/* ---------- Leaf loader ---------- */
+.hc-loader {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 0 10px;
+}
+
+.hc-loader__svg {
+  width: 88px;
+  height: 88px;
+  overflow: visible;
+}
+
+.hc-loader__outline {
+  fill: hsl(var(--cc-primary) / 0);
+  stroke: hsl(var(--cc-primary));
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation:
+    hc-draw 1.1s ease forwards,
+    hc-fill 0.5s ease forwards 1.05s,
+    hc-pulse 0.45s ease forwards 1.25s;
+}
+
+.hc-loader__vein {
+  stroke: hsl(var(--cc-primary-dark));
+  stroke-width: 2;
+  opacity: 0;
+  animation: hc-fade-in 0.3s ease forwards 1.1s;
+}
+
+.hc-loader__text {
+  color: hsl(var(--cc-text-muted));
+  font-size: 0.88rem;
+  font-style: italic;
+}
+
+@keyframes hc-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes hc-fill {
+  to { fill: hsl(var(--cc-primary) / 0.9); }
+}
+
+@keyframes hc-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes hc-fade-in {
+  to { opacity: 0.7; }
+}
+
+.hc-loader__burst {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  font-size: 1.2rem;
+  opacity: 0;
+  animation: hc-burst 0.6s ease forwards 1.2s;
+}
+
+@keyframes hc-burst {
+  0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--hc-x, 0px)), calc(-50% + var(--hc-y, 0px))) scale(1); opacity: 0; }
+}
+
+.hc-loader__burst--0 { --hc-x: -60px; --hc-y: -40px; }
+.hc-loader__burst--1 { --hc-x: 60px;  --hc-y: -40px; }
+.hc-loader__burst--2 { --hc-x: -75px; --hc-y: 10px; }
+.hc-loader__burst--3 { --hc-x: 75px;  --hc-y: 10px; }
+.hc-loader__burst--4 { --hc-x: -35px; --hc-y: 55px; }
+.hc-loader__burst--5 { --hc-x: 35px;  --hc-y: 55px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hc-loader__outline,
+  .hc-loader__vein,
+  .hc-loader__burst {
+    animation: none;
+    stroke-dashoffset: 0;
+    fill: hsl(var(--cc-primary) / 0.9);
+    opacity: 0;
+  }
+}
+
+/* ---------- Result card ---------- */
+.hc-result {
+  margin-top: 18px;
+  background: hsl(var(--cc-primary-light) / 0.35);
+  border: 1px solid hsl(var(--cc-border));
+  animation: hc-result-in 0.5s ease;
+}
+
+@keyframes hc-result-in {
+  from { opacity: 0; transform: scale(0.94) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.hc-result__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 4px 20px;
+  margin-bottom: 10px;
+}
+
+.hc-result__grid p {
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.hc-result__weather-message {
+  font-style: italic;
+  color: hsl(var(--cc-text-muted));
+  margin-bottom: 14px;
+}
+
+.hc-result__headline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed hsl(var(--cc-border));
+  padding-top: 12px;
+  font-weight: 700;
+}
+
+.hc-result__date {
+  color: hsl(var(--cc-primary-dark));
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+}
+
+.hc-result__toggle {
+  background: transparent;
+  color: hsl(var(--cc-primary));
+  padding: 4px 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 0;
+  margin-top: 12px;
+}
+
+.hc-result__toggle:hover {
+  color: hsl(var(--cc-primary-dark));
+}
+
+.hc-result__details {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed hsl(var(--cc-border));
+  animation: hc-result-in 0.25s ease;
+}
+
+.hc-result__add-btn {
+  margin-top: 16px;
+  width: 100%;
+  background: hsl(var(--cc-success));
+}
+
+.hc-result__add-btn:hover:not(:disabled) {
+  background: hsl(var(--cc-success) / 0.85);
+}

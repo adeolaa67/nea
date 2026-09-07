@@ -1,0 +1,228 @@
+.cc-about {
+  position: relative;
+  min-height: 100vh;
+  background: hsl(var(--cc-bg));
+}
+
+/* Petals fixed to the viewport keep falling continuously no matter how far
+   the page has scrolled, instead of being confined to the hero section. */
+.cc-about__petals-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 5;
+}
+
+.cc-about .cc-section__eyebrow {
+  color: #ff8fb3;
+}
+
+.cc-about__nav {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cc-about__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: hsl(var(--cc-primary-dark));
+  text-decoration: none;
+}
+
+.cc-about__back {
+  color: hsl(var(--cc-text-muted));
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.cc-about__back:hover {
+  color: hsl(var(--cc-primary));
+}
+
+/* ---------- Animated cherry blossom scene ---------- */
+.cc-blossom-scene {
+  position: relative;
+  overflow: hidden;
+  min-height: 78vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 40px 20px 0;
+  background: linear-gradient(180deg, #ffdcea 0%, #ffe7d9 45%, #fff6ef 100%);
+}
+
+.cc-blossom-scene__ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(180deg, hsl(140 22% 60%), hsl(140 26% 46%));
+  border-top-left-radius: 50% 20px;
+  border-top-right-radius: 50% 20px;
+  z-index: 1;
+}
+
+.cc-blossom-tree {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  margin: 0 -30px;
+  transform-origin: bottom center;
+  animation: cc-sway 6s ease-in-out infinite;
+  z-index: 2;
+}
+
+.cc-blossom-tree--left {
+  animation-delay: 0.4s;
+}
+
+.cc-blossom-tree--right {
+  transform: scaleX(-1);
+  animation-delay: 1.1s;
+}
+
+.cc-blossom-tree__trunk {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 130px;
+  background: linear-gradient(180deg, #a06a48, #5a3d26);
+  border-radius: 6px 6px 0 0;
+}
+
+.cc-blossom-tree__canopy {
+  position: absolute;
+  bottom: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 210px;
+  height: 170px;
+  background:
+    radial-gradient(circle at 30% 30%, #ffc6dd 0 40%, transparent 41%),
+    radial-gradient(circle at 65% 25%, #ffd3e4 0 45%, transparent 46%),
+    radial-gradient(circle at 50% 55%, #ffb8d4 0 50%, transparent 51%),
+    radial-gradient(circle at 20% 60%, #ffcbe0 0 38%, transparent 39%),
+    radial-gradient(circle at 78% 60%, #ffc0d8 0 42%, transparent 43%),
+    radial-gradient(circle at 50% 20%, #ffe0ec 0 30%, transparent 31%);
+}
+
+@keyframes cc-sway {
+  0%, 100% { transform: translateX(-50%) rotate(-2.5deg); }
+  50% { transform: translateX(-50%) rotate(2.5deg); }
+}
+
+.cc-blossom-scene__petals {
+  z-index: 3;
+}
+
+.cc-blossom-scene__copy {
+  position: relative;
+  z-index: 4;
+  max-width: 40rem;
+  margin: 0 auto 60px;
+  text-align: center;
+  background: hsl(0 0% 100% / 0.72);
+  backdrop-filter: blur(8px);
+  border-radius: var(--cc-radius);
+  padding: 32px 30px;
+  box-shadow: 0 12px 34px rgba(90, 40, 30, 0.12);
+}
+
+.cc-blossom-scene__copy h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.cc-blossom-scene__lede {
+  color: hsl(var(--cc-text));
+  line-height: 1.65;
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.cc-blossom-scene__cta {
+  display: inline-block;
+  margin-top: 10px;
+  background: hsl(340 100% 96%);
+  color: #e85a8a;
+  text-decoration: none;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: 1.5px solid #ffc3d9;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cc-blossom-scene__cta:hover {
+  background: #ffe3ee;
+  transform: translateY(-2px);
+}
+
+/* ---------- Feature grid ---------- */
+.cc-about__features {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 50px 20px 70px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px;
+}
+
+.cc-about__feature {
+  background: hsl(var(--cc-surface));
+  border: 1px solid hsl(var(--cc-border));
+  border-radius: var(--cc-radius);
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.cc-about__feature-icon {
+  font-size: 2.1rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.cc-about__feature h3 {
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.cc-about__feature p {
+  color: hsl(var(--cc-text-muted));
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .cc-blossom-scene {
+    min-height: 90vh;
+    padding-top: 24px;
+  }
+  .cc-blossom-tree {
+    width: 130px;
+    height: 220px;
+    margin: 0 -40px;
+  }
+  .cc-blossom-tree__canopy {
+    width: 150px;
+    height: 130px;
+    bottom: 100px;
+  }
+  .cc-blossom-tree__trunk {
+    height: 100px;
+    bottom: 40px;
+  }
+  .cc-blossom-scene__copy {
+    padding: 24px 18px;
+  }
+}
